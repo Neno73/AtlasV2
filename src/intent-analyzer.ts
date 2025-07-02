@@ -1,5 +1,6 @@
 import { gemini15Flash } from '@genkit-ai/googleai';
-import { ai, flow } from 'genkit';
+import { defineFlow } from '@genkit-ai/core';
+import { definePrompt } from '@genkit-ai/ai';
 import { z } from 'zod';
 import { 
   ProductDiscoverySchema, 
@@ -13,7 +14,7 @@ import { contextExtractionFlow, businessIntelligenceFlow } from './context-intel
 import { ambiguityDetectionFlow, clarificationGenerationFlow } from './ambiguity-detector.js';
 
 // Enhanced Intent Analysis Flow
-export const intentAnalysisFlow = flow(
+export const intentAnalysisFlow = defineFlow(
   {
     name: 'intentAnalysisFlow',
     inputSchema: z.object({
@@ -32,7 +33,7 @@ export const intentAnalysisFlow = flow(
   },
   async ({ query, conversationContext }) => {
     // Step 1: Basic intent analysis
-    const intentAnalysisPrompt = ai.definePrompt({
+    const intentAnalysisPrompt = definePrompt({
       name: 'intentAnalysisPrompt',
       model: gemini15Flash,
       input: {
@@ -90,7 +91,7 @@ Be conservative with confidence scores - mark anything unclear as requiring clar
     });
 
     // Step 4: Enhance understanding with context and ambiguity insights
-    const enhancedUnderstandingPrompt = ai.definePrompt({
+    const enhancedUnderstandingPrompt = definePrompt({
       name: 'enhancedUnderstandingPrompt',
       model: gemini15Flash,
       input: {
@@ -177,7 +178,7 @@ Confidence scores should reflect the overall ambiguity score and context clarity
 );
 
 // Clarification Processing Flow
-export const clarificationProcessingFlow = flow(
+export const clarificationProcessingFlow = defineFlow(
   {
     name: 'clarificationProcessingFlow',
     inputSchema: z.object({
@@ -193,7 +194,7 @@ export const clarificationProcessingFlow = flow(
     })
   },
   async ({ clarificationAnswer, questionAsked, conversationContext }) => {
-    const clarificationIntegrationPrompt = ai.definePrompt({
+    const clarificationIntegrationPrompt = definePrompt({
       name: 'clarificationIntegrationPrompt',
       model: gemini15Flash,
       input: {

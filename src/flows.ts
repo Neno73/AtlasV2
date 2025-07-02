@@ -18,14 +18,14 @@ const ProductDiscoveryOutputSchema = z.object({
   deadline: z.string().optional().describe('The deadline for the order.'),
 });
 
-export const productDiscoveryFlow = flow(
+export const productDiscoveryFlow = defineFlow(
   {
     name: 'productDiscoveryFlow',
     inputSchema: z.string(),
     outputSchema: ProductDiscoveryOutputSchema,
   },
   async (query) => {
-    const productExtractionPrompt = ai.definePrompt({
+    const productExtractionPrompt = definePrompt({
         name: 'productExtractionPrompt',
         model: gemini15Flash,
         input: {
@@ -54,7 +54,7 @@ export const productDiscoveryFlow = flow(
 );
 
 // Main conversation flow - uses the new intent analysis system
-export const conversationFlow = flow(
+export const conversationFlow = defineFlow(
   {
     name: 'conversationFlow',
     inputSchema: z.object({
@@ -90,7 +90,7 @@ export const conversationFlow = flow(
     });
 
     // Generate appropriate response based on the analysis
-    const responsePrompt = ai.definePrompt({
+    const responsePrompt = definePrompt({
       name: 'conversationResponsePrompt',
       model: gemini15Flash,
       input: {
@@ -158,7 +158,7 @@ Keep responses concise but comprehensive. Don't overwhelm with too many question
 );
 
 // Requirements gathering flow for multi-turn conversations
-export const requirementsGatheringFlow = flow(
+export const requirementsGatheringFlow = defineFlow(
   {
     name: 'requirementsGatheringFlow',
     inputSchema: z.object({
@@ -190,7 +190,7 @@ export const requirementsGatheringFlow = flow(
     });
 
     // Generate response acknowledging the clarification
-    const responsePrompt = ai.definePrompt({
+    const responsePrompt = definePrompt({
       name: 'clarificationResponsePrompt',
       model: gemini15Flash,
       input: {

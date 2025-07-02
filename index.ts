@@ -1,9 +1,15 @@
+import 'dotenv/config';
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/googleai';
+import { conversationFlow, requirementsGatheringFlow } from './src/flows';
+import { productDiscoveryFlow } from './flows/atlas-flows';
 
-export default genkit({
+genkit({
   plugins: [googleAI()],
-  flows: [__dirname + '/src/flows.ts'],
-  logLevel: 'debug',
-  enableTracing: true,
 });
+
+export {
+  conversationFlow,
+  productDiscoveryFlow,
+  requirementsGatheringFlow
+};

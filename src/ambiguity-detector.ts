@@ -1,5 +1,6 @@
 import { gemini15Flash } from '@genkit-ai/googleai';
-import { ai, flow } from 'genkit';
+import { defineFlow } from '@genkit-ai/core';
+import { definePrompt } from '@genkit-ai/ai';
 import { z } from 'zod';
 import { AmbiguityTypeSchema, ClarificationQuestionSchema } from './schemas.js';
 
@@ -43,7 +44,7 @@ export const AMBIGUITY_PATTERNS = {
 } as const;
 
 // Advanced Ambiguity Detection Flow
-export const ambiguityDetectionFlow = flow(
+export const ambiguityDetectionFlow = defineFlow(
   {
     name: 'ambiguityDetectionFlow',
     inputSchema: z.object({
@@ -69,7 +70,7 @@ export const ambiguityDetectionFlow = flow(
     })
   },
   async ({ query, extractedData, conversationHistory }) => {
-    const ambiguityAnalysisPrompt = ai.definePrompt({
+    const ambiguityAnalysisPrompt = definePrompt({
       name: 'ambiguityAnalysisPrompt',
       model: gemini15Flash,
       input: {
@@ -199,7 +200,7 @@ Be thorough - it's better to over-identify potential ambiguities than miss impor
 );
 
 // Smart Clarification Question Generation Flow
-export const clarificationGenerationFlow = flow(
+export const clarificationGenerationFlow = defineFlow(
   {
     name: 'clarificationGenerationFlow',
     inputSchema: z.object({
@@ -211,7 +212,7 @@ export const clarificationGenerationFlow = flow(
     outputSchema: z.array(ClarificationQuestionSchema)
   },
   async ({ ambiguities, contextAnalysis, conversationState, maxQuestions }) => {
-    const clarificationPrompt = ai.definePrompt({
+    const clarificationPrompt = definePrompt({
       name: 'smartClarificationPrompt',
       model: gemini15Flash,
       input: {

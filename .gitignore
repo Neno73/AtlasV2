@@ -2,3 +2,9 @@ test/
 node_modules/
 .genkit/
 *.js
+dist/
+.env
+*.log
+.DS_Store
+coverage/
+.nyc_output/

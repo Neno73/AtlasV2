@@ -1,5 +1,6 @@
 import { gemini15Flash } from '@genkit-ai/googleai';
-import { ai, flow } from 'genkit';
+import { defineFlow } from '@genkit-ai/core';
+import { definePrompt } from '@genkit-ai/ai';
 import { z } from 'zod';
 import { 
   IndustryContextSchema, 
@@ -78,7 +79,7 @@ export const EVENT_PATTERNS = {
 } as const;
 
 // Context Extraction Flow
-export const contextExtractionFlow = flow(
+export const contextExtractionFlow = defineFlow(
   {
     name: 'contextExtractionFlow',
     inputSchema: z.object({
@@ -122,7 +123,7 @@ export const contextExtractionFlow = flow(
     })
   },
   async ({ query, previousContext }) => {
-    const contextAnalysisPrompt = ai.definePrompt({
+    const contextAnalysisPrompt = definePrompt({
       name: 'contextAnalysisPrompt',
       model: gemini15Flash,
       input: {
@@ -271,7 +272,7 @@ Be conservative with confidence scores - if unclear, mark as 'unknown' with low 
 );
 
 // Business Intelligence Flow - provides strategic recommendations
-export const businessIntelligenceFlow = flow(
+export const businessIntelligenceFlow = defineFlow(
   {
     name: 'businessIntelligenceFlow',
     inputSchema: z.object({
@@ -299,7 +300,7 @@ export const businessIntelligenceFlow = flow(
     })
   },
   async ({ understanding, contextAnalysis }) => {
-    const businessIntelligencePrompt = ai.definePrompt({
+    const businessIntelligencePrompt = definePrompt({
       name: 'businessIntelligencePrompt',
       model: gemini15Flash,
       input: {

@@ -1,5 +1,6 @@
 import { gemini15Flash } from '@genkit-ai/googleai';
-import { ai, flow } from 'genkit';
+import { defineFlow } from '@genkit-ai/core';
+import { definePrompt } from '@genkit-ai/ai';
 import { z } from 'zod';
 import { ConversationContextSchema, type ConversationContext } from './schemas.js';
 
@@ -32,7 +33,7 @@ export const UserPreferenceSchema = z.object({
 });
 
 // Conversation State Management Flow
-export const conversationStateFlow = flow(
+export const conversationStateFlow = defineFlow(
   {
     name: 'conversationStateFlow',
     inputSchema: z.object({
@@ -53,7 +54,7 @@ export const conversationStateFlow = flow(
     })
   },
   async ({ action, conversationContext, userInput, systemResponse }) => {
-    const stateAnalysisPrompt = ai.definePrompt({
+    const stateAnalysisPrompt = definePrompt({
       name: 'conversationStateAnalysis',
       model: gemini15Flash,
       input: {
@@ -145,7 +146,7 @@ Stuck Indicators:
 );
 
 // Learning and Adaptation Flow
-export const learningAdaptationFlow = flow(
+export const learningAdaptationFlow = defineFlow(
   {
     name: 'learningAdaptationFlow',
     inputSchema: z.object({
@@ -170,7 +171,7 @@ export const learningAdaptationFlow = flow(
     })
   },
   async ({ conversationContext, conversationMetrics, userFeedback }) => {
-    const learningAnalysisPrompt = ai.definePrompt({
+    const learningAnalysisPrompt = definePrompt({
       name: 'learningAnalysisPrompt',
       model: gemini15Flash,
       input: {
@@ -241,7 +242,7 @@ Focus on actionable insights that will make future conversations more efficient 
 );
 
 // Conversation Quality Assessment Flow
-export const conversationQualityFlow = flow(
+export const conversationQualityFlow = defineFlow(
   {
     name: 'conversationQualityFlow',
     inputSchema: z.object({
@@ -252,7 +253,7 @@ export const conversationQualityFlow = flow(
     outputSchema: ConversationMetricsSchema
   },
   async ({ conversationContext, finalUnderstanding, userSatisfactionSignals }) => {
-    const qualityAssessmentPrompt = ai.definePrompt({
+    const qualityAssessmentPrompt = definePrompt({
       name: 'qualityAssessmentPrompt',
       model: gemini15Flash,
       input: {
@@ -300,7 +301,7 @@ Generate comprehensive metrics for continuous improvement.`
 );
 
 // Proactive Problem Detection Flow
-export const proactiveProblemDetectionFlow = flow(
+export const proactiveProblemDetectionFlow = defineFlow(
   {
     name: 'proactiveProblemDetectionFlow',
     inputSchema: z.object({
@@ -324,7 +325,7 @@ export const proactiveProblemDetectionFlow = flow(
     })
   },
   async ({ conversationContext, currentUnderstanding, recentUserInput }) => {
-    const problemDetectionPrompt = ai.definePrompt({
+    const problemDetectionPrompt = definePrompt({
       name: 'problemDetectionPrompt',
       model: gemini15Flash,
       input: {
