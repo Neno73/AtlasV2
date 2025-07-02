@@ -1,11 +1,14 @@
 {
-  "name": "js-character-generator",
+  "name": "atlas-promotional-products-ai",
   "version": "0.1.0",
-  "description": "A simple Genkit app to generate fantasy characters",
+  "description": "Atlas Promotional Products AI Assistant - Conversational AI for promotional products dealers using Google Genkit",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "genkit:dev": "npx genkit start -- npx tsx --watch index.ts"
+    "genkit:dev": "npx genkit start -- npx tsx --watch index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx tsc --noEmit",
+    "dev": "npm run genkit:dev"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +20,9 @@
   },
   "dependencies": {
     "genkit": "^1.0.4",
-    "@genkit-ai/googleai": "^1.0.4"
+    "@genkit-ai/core": "^1.0.4",
+    "@genkit-ai/ai": "^1.0.4",
+    "@genkit-ai/googleai": "^1.0.4",
+    "zod": "^3.22.4"
   }
 }
