@@ -10,11 +10,26 @@ import {
   type ClarificationQuestion,
   type ConversationContext
 } from './schemas.js';
-import { contextExtractionFlow, businessIntelligenceFlow } from './context-intelligence.js';
-import { ambiguityDetectionFlow, clarificationGenerationFlow } from './ambiguity-detector.js';
+import { createContextExtractionFlow, createBusinessIntelligenceFlow } from './context-intelligence.js';
+import { createAmbiguityDetectionFlow, createClarificationGenerationFlow } from './ambiguity-detector.js';
+
+// Flows will be initialized lazily
+let contextExtractionFlow: any;
+let businessIntelligenceFlow: any;
+let ambiguityDetectionFlow: any;
+let clarificationGenerationFlow: any;
+
+function initializeFlows() {
+  if (!contextExtractionFlow) {
+    contextExtractionFlow = createContextExtractionFlow();
+    businessIntelligenceFlow = createBusinessIntelligenceFlow();
+    ambiguityDetectionFlow = createAmbiguityDetectionFlow();
+    clarificationGenerationFlow = createClarificationGenerationFlow();
+  }
+}
 
 // Enhanced Intent Analysis Flow
-export const intentAnalysisFlow = defineFlow(
+export const createIntentAnalysisFlow = () => defineFlow(
   {
     name: 'intentAnalysisFlow',
     inputSchema: z.object({
@@ -32,6 +47,9 @@ export const intentAnalysisFlow = defineFlow(
     })
   },
   async ({ query, conversationContext }) => {
+    // Initialize flows if not already done
+    initializeFlows();
+    
     // Step 1: Basic intent analysis
     const intentAnalysisPrompt = definePrompt({
       name: 'intentAnalysisPrompt',
@@ -178,7 +196,7 @@ Confidence scores should reflect the overall ambiguity score and context clarity
 );
 
 // Clarification Processing Flow
-export const clarificationProcessingFlow = defineFlow(
+export const createClarificationProcessingFlow = () => defineFlow(
   {
     name: 'clarificationProcessingFlow',
     inputSchema: z.object({

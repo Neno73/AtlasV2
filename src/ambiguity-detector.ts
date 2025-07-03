@@ -44,7 +44,7 @@ export const AMBIGUITY_PATTERNS = {
 } as const;
 
 // Advanced Ambiguity Detection Flow
-export const ambiguityDetectionFlow = defineFlow(
+export const createAmbiguityDetectionFlow = () => defineFlow(
   {
     name: 'ambiguityDetectionFlow',
     inputSchema: z.object({
@@ -200,7 +200,7 @@ Be thorough - it's better to over-identify potential ambiguities than miss impor
 );
 
 // Smart Clarification Question Generation Flow
-export const clarificationGenerationFlow = defineFlow(
+export const createClarificationGenerationFlow = () => defineFlow(
   {
     name: 'clarificationGenerationFlow',
     inputSchema: z.object({

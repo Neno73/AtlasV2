@@ -79,7 +79,7 @@ export const EVENT_PATTERNS = {
 } as const;
 
 // Context Extraction Flow
-export const contextExtractionFlow = defineFlow(
+export const createContextExtractionFlow = () => defineFlow(
   {
     name: 'contextExtractionFlow',
     inputSchema: z.object({
@@ -272,7 +272,7 @@ Be conservative with confidence scores - if unclear, mark as 'unknown' with low 
 );
 
 // Business Intelligence Flow - provides strategic recommendations
-export const businessIntelligenceFlow = defineFlow(
+export const createBusinessIntelligenceFlow = () => defineFlow(
   {
     name: 'businessIntelligenceFlow',
     inputSchema: z.object({

@@ -2,12 +2,23 @@ import { gemini15Flash } from '@genkit-ai/googleai';
 import { defineFlow } from '@genkit-ai/core';
 import { definePrompt } from '@genkit-ai/ai';
 import { z } from 'zod';
-import { intentAnalysisFlow, clarificationProcessingFlow } from './intent-analyzer.js';
+import { createIntentAnalysisFlow, createClarificationProcessingFlow } from './intent-analyzer.js';
 import { 
   ProductDiscoverySchema, 
   ConversationContextSchema,
   type ConversationContext 
 } from './schemas.js';
+
+// Initialize flows lazily
+let intentAnalysisFlow: any;
+let clarificationProcessingFlow: any;
+
+function initializeAnalysisFlows() {
+  if (!intentAnalysisFlow) {
+    intentAnalysisFlow = createIntentAnalysisFlow();
+    clarificationProcessingFlow = createClarificationProcessingFlow();
+  }
+}
 
 // Legacy product discovery flow - kept for backward compatibility
 const ProductDiscoveryOutputSchema = z.object({
@@ -18,7 +29,7 @@ const ProductDiscoveryOutputSchema = z.object({
   deadline: z.string().optional().describe('The deadline for the order.'),
 });
 
-export const productDiscoveryFlow = defineFlow(
+export const createProductDiscoveryFlow = () => defineFlow(
   {
     name: 'productDiscoveryFlow',
     inputSchema: z.string(),
@@ -54,7 +65,7 @@ export const productDiscoveryFlow = defineFlow(
 );
 
 // Main conversation flow - uses the new intent analysis system
-export const conversationFlow = defineFlow(
+export const createConversationFlow = () => defineFlow(
   {
     name: 'conversationFlow',
     inputSchema: z.object({
@@ -83,6 +94,9 @@ export const conversationFlow = defineFlow(
     })
   },
   async ({ message, conversationContext }) => {
+    // Initialize analysis flows if not already done
+    initializeAnalysisFlows();
+    
     // Analyze the message using the intent analysis flow
     const analysisResult = await intentAnalysisFlow({
       query: message,
@@ -158,7 +172,7 @@ Keep responses concise but comprehensive. Don't overwhelm with too many question
 );
 
 // Requirements gathering flow for multi-turn conversations
-export const requirementsGatheringFlow = defineFlow(
+export const createRequirementsGatheringFlow = () => defineFlow(
   {
     name: 'requirementsGatheringFlow',
     inputSchema: z.object({
@@ -182,6 +196,9 @@ export const requirementsGatheringFlow = defineFlow(
     })
   },
   async ({ clarificationAnswer, questionAsked, conversationContext }) => {
+    // Initialize analysis flows if not already done
+    initializeAnalysisFlows();
+    
     // Process the clarification using the clarification processing flow
     const clarificationResult = await clarificationProcessingFlow({
       clarificationAnswer,

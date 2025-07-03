@@ -3,7 +3,7 @@ import { gemini15Flash } from '@genkit-ai/googleai';
 import { z } from 'zod';
 
 // Simple test flow
-export const testFlow = defineFlow(
+export const createTestFlow = () => defineFlow(
   {
     name: 'testFlow',
     inputSchema: z.string(),
@@ -21,7 +21,7 @@ export const testFlow = defineFlow(
 );
 
 // Main Atlas conversation flow - demonstrates core capabilities
-export const atlasConversationFlow = defineFlow(
+export const createAtlasConversationFlow = () => defineFlow(
   {
     name: 'atlasConversationFlow',
     inputSchema: z.object({
@@ -115,7 +115,7 @@ Focus on being a knowledgeable promotional products consultant who understands b
 );
 
 // Product Discovery Flow - focused on entity separation
-export const productDiscoveryFlow = defineFlow(
+export const createProductDiscoveryFlow = () => defineFlow(
   {
     name: 'productDiscoveryFlow',
     inputSchema: z.string(),
